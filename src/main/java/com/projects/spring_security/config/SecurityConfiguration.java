@@ -16,10 +16,11 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable());
         http.
                 authorizeHttpRequests(request -> request.
                         requestMatchers("/myAccount","/myBalance","/myCards").authenticated().
-                        requestMatchers("/notifications").permitAll());
+                        requestMatchers("/notifications","/register").permitAll());
         http.formLogin(withDefaults());
         http.httpBasic(withDefaults());
         return http.build();
