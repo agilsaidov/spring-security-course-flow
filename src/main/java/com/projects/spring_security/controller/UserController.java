@@ -1,6 +1,6 @@
 package com.projects.spring_security.controller;
 
-import com.projects.spring_security.CustomerRepository;
+import com.projects.spring_security.repo.CustomerRepository;
 import com.projects.spring_security.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

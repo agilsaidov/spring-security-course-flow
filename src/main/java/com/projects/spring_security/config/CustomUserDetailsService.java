@@ -1,6 +1,6 @@
 package com.projects.spring_security.config;
 
-import com.projects.spring_security.CustomerRepository;
+import com.projects.spring_security.repo.CustomerRepository;
 import com.projects.spring_security.model.Customer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final CustomerRepository customerRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails
+    loadUserByUsername(String username) throws UsernameNotFoundException {
         Customer customer = customerRepository.findCustomerByUsername(username).orElseThrow(() -> new
                 UsernameNotFoundException("User details not found for user: " + username));
         List<GrantedAuthority> grantedAuthorities = List.of(new SimpleGrantedAuthority(customer.getRole()));

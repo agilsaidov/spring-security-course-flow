@@ -1,4 +1,4 @@
-package com.projects.spring_security;
+package com.projects.spring_security.repo;
 
 
 import com.projects.spring_security.model.Customer;

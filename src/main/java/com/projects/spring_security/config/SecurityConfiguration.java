@@ -1,5 +1,6 @@
 package com.projects.spring_security.config;
 
+import com.projects.spring_security.exceptionhandling.CustomBasicAuthenticationEntryPoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -18,13 +19,17 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()); //Only HTTP requests
         http.csrf(csrf -> csrf.disable());
         http.
                 authorizeHttpRequests(request -> request.
                         requestMatchers("/myAccount","/myBalance","/myCards").authenticated().
-                        requestMatchers("/notifications","/register").permitAll());
+                        requestMatchers("/notifications","/register").permitAll()
+                        .anyRequest().denyAll()
+                        );
+
         http.formLogin(withDefaults());
-        http.httpBasic(withDefaults());
+        http.httpBasic(httpBasicConfig -> httpBasicConfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         return http.build();
     }
 
