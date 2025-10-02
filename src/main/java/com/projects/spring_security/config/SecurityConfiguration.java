@@ -20,17 +20,19 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.sessionManagement(smc -> smc.invalidSessionUrl("/invalidSession"));
         http.requiresChannel(rcc -> rcc.anyRequest().requiresInsecure()); //Only HTTP requests
         http.csrf(csrf -> csrf.disable());
         http.
                 authorizeHttpRequests(request -> request.
                         requestMatchers("/myAccount","/myBalance","/myCards").authenticated().
-                        requestMatchers("/notifications","/register").permitAll()
-                        .anyRequest().denyAll()
+                        requestMatchers("/notifications","/register").permitAll().
+                        requestMatchers("/", "/favicon.ico", "/error", "/css/**", "/js/**", "/images/**").permitAll()
                         );
 
         http.formLogin(withDefaults());
-        http.httpBasic(httpBasicConfig -> httpBasicConfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
+        http.httpBasic(withDefaults());
+        //http.httpBasic(httpBasicConfig -> httpBasicConfig.authenticationEntryPoint(new CustomBasicAuthenticationEntryPoint()));
         http.exceptionHandling(ehc -> ehc.accessDeniedHandler(new CustomAccessDeniedHandler()));
         return http.build();
     }
